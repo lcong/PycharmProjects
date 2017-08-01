@@ -36,6 +36,9 @@ if __name__ == "__main__":
 
     print(repr(data1))
 
+
+    print('------------0----------------')
+
     values = (1, b'abc', 2.7)
     s = struct.Struct('I3sf')
     packed_data = s.pack(*values)
@@ -45,6 +48,7 @@ if __name__ == "__main__":
     print('Uses :', s.size, 'bytes')
     print('Packed Value :', binascii.hexlify(packed_data))
     print('Unpacked Type :', type(unpacked_data), ' Value:', unpacked_data)
+    print('------------1----------------')
 
     values = (1, b'abc', 2.7)
     s = struct.Struct('I3sf')
@@ -55,6 +59,8 @@ if __name__ == "__main__":
     unpacked = s.unpack_from(prebuffer, 0)
     print('After unpack:', unpacked)
 
+
+    print('-------------2---------------')
     values1 = (1, b'abc', 2.7)
     values2 = (b'defg', 101)
     s1 = struct.Struct('I3sf')
