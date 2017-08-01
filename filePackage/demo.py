@@ -22,18 +22,14 @@ if __name__ == "__main__":
     b=item() # 定义结构对象
     b.head = 0x08
     b.payload= 0x10
-    b.name = "cup"
+    b.name = b"cup"
 
 
-
-    data=struct.pack("ih",b.head,b.payload)
-
+    data=struct.pack("ih3s",b.head,b.payload,b.name)
     print(repr(data))
 
     values = [0x08,0x20,0x12]
-
     data1 = struct.pack("iiI", 0x08,0x20,0x12345678)
-
     print(repr(data1))
 
 
@@ -60,7 +56,7 @@ if __name__ == "__main__":
     print('After unpack:', unpacked)
 
 
-    print('-------------2---------------')
+    print('------------2----------------')
     values1 = (1, b'abc', 2.7)
     values2 = (b'defg', 101)
     s1 = struct.Struct('I3sf')
