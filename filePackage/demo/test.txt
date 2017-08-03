@@ -1,3 +1,212 @@
 2121473_PM5440_sdk_v2_04_1909_170781
 head first
 python
+
+PreviousPrevious NextNext
+
+Function setsockopt
+
+Set a socket option.
+
+int setsockopt(SOCKET       socket,
+               int          level,
+               int          option_name,
+               const char * option_value,
+               int          optionlen);
+
+Parameters
+
+socket
+
+Socket returned by socket or accept.
+
+level
+
+Protocol level (SOL_SOCKET or IPPROTO_IP). See the table below for further details.
+
+option_name
+
+The option to modify. See the table below for all supported values.
+
+option_value
+
+Pointer to a buffer which contains values for the specified option.
+
+optionlen
+
+Length of data pointed to by parameter option_value.
+
+return value
+
+If the function succeeds, zero is returned. If an error occurred, call xn_getlasterror and xn_geterror_string to return the error value. Error Codes further describes each error. Possible values for this function are: Value Meaning
+EINVAL The socket has not been bound.
+EFAULT Invalid parameter, i.e. a pointer is NULL, optionlen is not valid or option_value is not valid.
+ENOPROTOOPT Option parameter is invalid or unsupported.
+ENOTINITIALIZED RTIP-32 has not been initialized (xn_rtip_init has not been called)
+ENOTSOCK Invalid socket descriptor.
+EOPNOTSUPPORT Socket type not supported for this function.
+
+
+The following table is a summary of all supported protocol levels and options. Additional information about some options is available below the table.
+
+level
+option_name TCP
+UDP Default option_value Meaning
+SOL_SOCKET
+SO_KEEPALIVE TCP Disabled Type int. 0 means turn off; non-0 means turn option off Enables/disables sending of TCP keepalive packets. See below for further details.
+SOL_SOCKET
+SO_LINGER TCP Disabled Type struct linger. See closesocket. Enables/disables linger on TCP close. See below for further details.
+SOL_SOCKET
+SO_MAX_UDP_QUE UDP, RAW No Limit Type int. If greater than 0, max queue size; if less than 0, turn option off; 0 is invalid. Maximum number of input UDP packets which will be queued on the socket at one time. Any additional input packets will be dropped.
+SOL_SOCKET
+SO_NAGLE TCP Enabled Type int. 0 means turn off; non-0 means turn option on. The Nagle Algorithm prohibits sending of small TCP packets (less than MSS) while there is any outstanding output data which has not been acknowledged.
+SOL_SOCKET
+SO_DELAYED_ACK TCP Enabled Type int. 0 means turn off; non-0 means turn option on. Delay sending TCP acknowledgment for up to CFG_MAX_DELAY_ACK msecs. In a stream of full-size packets, every other packet will be acknowledged.
+SOL_SOCKET
+SO_REUSESOCK TCP Disabled Type int. 0 means turn off; non-0 means turn option on. Enable/disable ability to reuse a socket in the timed-wait state if no other sockets are available.
+SOL_SOCKET
+SO_TCP_NO_COPY TCP Copy Mode Type int. 0 means turn off; non-0 means turn option on. Enables/disables copying of TCP input/output data directly to input/output packets. See below for details.
+SOL_SOCKET
+SO_TCP_TIMESTAMP TCP Disabled Type int. 0 means turn off; non-zero means turn option on. Send timestamp in initial SYNC.
+SOL_SOCKET
+SO_SELECT_SIZE TCP Disabled Type int. 0 means turn off; non-zero means turn option on. Specifies the minimum number of bytes in the TCP output window at which select should return.
+SOL_SOCKET
+SO_INPUT_WINDOW/
+SO_RCVBUF TCP See xn_interface_opt(..., IO_INPUT_WINDOW, ...) Type int. Any value < 1G. Specifies the maximum number of incoming bytes the socket can buffer. For values > 0xFFFF, TCP Window Scaling will be used. This option can only be applied to a socket before it is connected. Please note that large windows require much buffer space, so CFG_NUM_PACKETS3 may need to be increased.
+SOL_SOCKET
+SO_OUTPUT_WINDOW/
+SO_SNDBUF TCP See xn_interface_opt(..., IO_OUTPUT_WINDOW, ...) Type int. Any value < 1G. Specifies the maximum number of outgoing bytes the socket can buffer. This option can only be applied to a socket before it is connected. Please note that large windows require much buffer space, so CFG_NUM_PACKETS3 may need to be increased.
+SOL_SOCKET
+SO_UDPCKSUM_IN UDP Enabled Type int. 0 means turn off; non-0 means turn option on. Enables/disables checking input packet checksums. See below for details.
+SOL_SOCKET
+SO_UDPCKSUM_OUT UDP Enabled Type int. 0 means turn off; non-0 means turn option on. Enable/disables generating checksums for outgoing packets. See below for details.
+SOL_SOCKET
+SO_IP_TTL TCP, UDP CFG_IP_TTL Type int. -1 means not set for getsockopt; if in range 0-255, IP TTL. Sets IP time-to-live value in hops for outgoing packets. See below for details.
+SOL_SOCKET
+SO_REUSEADDR TCP, UDP Disabled Type int. 0 means turn off; non-0 means turn option on. Allow the socket to use the same address, i.e. IP address and port number, which is already being used by another socket of the same protocol type in the system.
+IPPROTO_IP
+IP_ADD_MEMBERSHIP UDP None Type struct ip_mreq. imr_multiaddr specifies the multicast address of the group to join; imr_interface specifies the local IP address of the interface to receive the multicast datagrams on. Join a multicast group. getsockopt is not available for this option. See below for details.
+IPPROTO_IP
+IP_DROP_MEMBERSHIP UDP None Type struct ip_mreq. imr_multiaddr specifies the multicast address of the group to leave; imr_interface specifies the local IP address of the interface to stop receiving those multicast datagrams on. Leave a multicast group. getsockopt is not available for this option. See below for details.
+IPPROTO_IP
+IP_MULTICAST_IF UDP Disabled Type struct in_addr. Specifies the local IP address of the interface to use as a default multicast interface. Set a default interface for outgoing multicast packets.
+IPPROTO_IP
+IP_MULTICAST_LOOP UDP Enabled Type int. 0 means disable; 1 means enable loopback. Enables/disables loopback of multicast datagrams.
+IPPROTO_IP
+IP_MULTICAST_TTL UDP 60 Type int in the range 0 to 225 Set the IP time-to-live for outgoing multicast packets in hops for the socket.
+SOL_SOCKET
+SO_802_2 TCP, UDP Disabled Type int. 0 means turn off; non-0 means turn option on. Packets sent on this socket should use the 802.2 format. Please note that you can also control 802.2 formatting on a per-interface basis using function xn_interface_opt.
+SOL_SOCKET
+SO_IP_TTL TCP, UDP CFG_IP_TTL (60) Type int. Time-to-live value in hops for IP header (0-255). Set the IP time-to-live for outgoing packets for the socket.
+SOL_SOCKET
+SO_TOS TCP, UDP 0 Type int. 0 means turn off; non-0 means turn option on. Value to write in TOS field in IP header for outgoing packets.
+SOL_SOCKET
+SO_BROADCAST UDP Enabled Type int. 0 means turn off; non-0 means turn option on. This option controls whether the socket supports sending and receiving broadcasts.
+SOL_SOCKET
+SO_BROADCAST_LOOPBACK UDP Enabled Type int. 0 means turn off; non-0 means turn option on. This option controls whether broadcasts sent on the socket will also be sent on the loopback interface, if the loopback interface has been opened.
+SOL_SOCKET
+SO_RCV_TIMEO TCP, UDP Disabled (no timeout) Type struct timeval. Defines the receive timeout of the socket in blocking mode.
+SOL_SOCKET
+SO_SEND_TIMEO TCP, UDP Disabled (no timeout) Type struct timeval. Defines the send timeout of the socket in blocking mode.
+
+
+setsockopt Options Summary
+
+
+Option Details
+
+SO_KEEPALIVE
+
+If keepalive is enabled, TCP keepalive packets are sent to the connected host socket if no packet has been received from that host after a period of time. Keepalive is retried until a packet is received or a timeout occurs. If a timeout occurs, the socket is set to the closed state, i.e. no close handshake is attempted. The configuration constants CFG_KA_INTERVAL, CFG_KA_RETRY, and CFG_KA_TMO control when keepalive packets are sent. If the socket is closed, the resources will not be freed until closesocket or xn_abort is called.
+
+SO_LINGER
+
+For the linger option, the parameter option_value points to the following structure:
+
+typedef struct linger
+{
+   int l_onoff;
+   int l_linger;  // seconds to linger
+} LINGER;
+
+A graceful close with no blocking is enabled by calling setsockopt with option_name set to SO_LINGER and l_onoff set to zero. A graceful close with blocking, waiting for output queue to empty, is enabled by calling setsockopt with option_name set to SO_LINGER and l_onoff set to non-zero and l_linger set to a non-zero value. A hard close is enabled by calling setsockopt with option_name set to SO_LINGER and l_onoff set to non-zero and l_linger set to zero. See closesocket for more information about closing sockets.
+
+
+SO_TCP_NO_COPY
+
+If the socket is set to no copy mode, the minimal amount of copying of data is done. For socket functions, the output data is copied directly from the user buffer to an output packet and input data is copied directly from the packet to the user buffer, i.e. the input and output window will consist of the actual input and output packets. For the RTIP-32 and native API functions, the user sets up and retrieves the data directly from the packets. The window consists of a linked list of DCUs and the input and output packets are queued in the window. This option is not recommended for small data packets, since the DCUs queued in the window will only contain small amounts of data.
+
+SO_UDPCKSUM_IN and SO_UDPCKSUM_OUT
+
+Disabling UDP checksum generation/checking. This option can improve performance but is not recommended on interfaces where hardware does not perform its own data integrity checking.
+
+SO_MAX_UDP_QUE
+
+In order to limit the number of input packets which can be queued, call setsockopt with the option SO_MAX_UDP_QUE. This is recommended to avoid running out of packets.
+
+SO_IP_TTL
+
+The IP time_to_live sets the value which will be set in the IP TTL field of outgoing packets for the socket. If setsockopt is not called for this socket, the time to live will be set to one for packets with a multicast destination address and all others will be set to CFG_IP_TTL.
+
+setsockopt may be called to change the IP TTL for all non-multicast packets with the SO_IP_TTL option and for all multicast packets with the IP_MULTICAST_TTL option.
+
+
+IP_ADD_MEMBERSHIP and IP_DROP_MEMBERSHIP
+
+For the IP_ADD_MEMBERSHIP and IP_DROP_MEMBERSHIP options, the parameter option_value points to the following structure:
+
+typedef struct ip_mreq
+{
+   struct in_addr imr_multiaddr;  // multicast address of group to join
+   struct in_addr imr_interface;  // local IP address of interface to join on
+} IP_MREQ;
+
+where struct in_addr is:
+
+typedef struct in_addr
+{
+   union
+   {
+      struct
+      {
+         BYTE s_b1;
+         BYTE s_b2;
+         BYTE s_b3;
+         BYTE s_b4;
+      } s_un_b;
+      struct
+      {
+          WORD s_w1;
+          WORD s_w2;
+      } s_un_w;
+      DWORD S_addr;
+   } s_un;
+};
+
+In order to receive multicast datagrams for a given multicast group, a host must join that group by specifying the multicast address in imr_multiaddr and the address of the interface to receive the multicast datagrams on in imr_interface. The addresses must be entered in network byte order. Specifying INADDR_ANY for imr_interface causes the default multicast interface to be used if one has been selected. Leaving a group uses the same structures. For the IP_MULTICAST_IF option the parameter option_value points to the in_addr structure shown above. The option allows the default local interface from which multicast packets are sent to be set. The local IP address of the default interface must be entered in network byte order. Specifying INADDR_ANY turns off the option.
+
+Here is an example of joining the multicast group 224.100.1.1 on interface 205.161.8.16:
+
+struct ip_mreq mcreq;
+BYTE ip_addr[]  = {224, 100, 1, 1};
+BYTE ip_iface[] = {205, 161, 8, 16};
+
+memcpy(&mcreq.imr_multiaddr.s_un.S_addr, ip_addr,  IP_ALEN);
+memcpy(&mcreq.imr_interface.s_un.S_addr, ip_iface, IP_ALEN);
+if (setsockopt(s, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char*)&mcreq, sizeof(mcreq)) != 0)
+   printf("setsockopt failed\n");
+
+
+
+--------------------------------------------------------------------------------
+
+LeftSocket API
+
+UpFunction sendto
+
+DownFunction shutdown
+
+
+--------------------------------------------------------------------------------
+
+Copyright © 1996, 2016 On Time

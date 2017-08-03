@@ -28,3 +28,15 @@ class item:
         self.head = ''
         self.payload = ''
         self.name = ''
+
+class lolist:
+    def __init__(self,lol):
+        self.lol= lol
+        print('lol init...')
+
+    def print_lol(self):
+        for each_item in self.lol:
+            if isinstance(each_item,list):
+                lolist.print_lolist(each_item)
+            else:
+                print(each_item)
