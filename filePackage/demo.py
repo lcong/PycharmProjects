@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 from demo.classOne import classOne
 from demo.classTwo import classTwo
 from demo.file import myfile
@@ -18,22 +20,26 @@ if __name__ == "__main__":
     a = myfile("./demo/test.txt")
     a.printFilePath()
     a.testReadFile()
+    a.testWriteFile()
 
     b=item() # 定义结构对象
     b.head = 0x08
     b.payload= 0x10
-    b.name = b"cup"
+    b.name = b"a cup of coffee"
 
 
-    data=struct.pack("ih3s",b.head,b.payload,b.name)
-    print(repr(data))
+    data0=struct.pack("ih10s", b.head, b.payload, b.name)
+   # print(repr(data))
+
+    print('data0 Values :', binascii.hexlify(data0))
 
     values = [0x08,0x20,0x12]
-    data1 = struct.pack("iiI", 0x08,0x20,0x12345678)
+    data1 = struct.pack("iih",*values)
     print(repr(data1))
 
+    print('data1 Values :', binascii.hexlify(data1))
 
-    print('------------0----------------')
+    print('------------第“1”种打包方式----------------')
 
     values = (1, b'abc', 2.7)
     s = struct.Struct('I3sf')
@@ -44,7 +50,9 @@ if __name__ == "__main__":
     print('Uses :', s.size, 'bytes')
     print('Packed Value :', binascii.hexlify(packed_data))
     print('Unpacked Type :', type(unpacked_data), ' Value:', unpacked_data)
-    print('------------1----------------')
+
+
+    print('------------第“2”种打包方式----------------')
 
     values = (1, b'abc', 2.7)
     s = struct.Struct('I3sf')
@@ -56,7 +64,8 @@ if __name__ == "__main__":
     print('After unpack:', unpacked)
 
 
-    print('------------2----------------')
+    print('------------第“3”种打包方式----------------')
+
     values1 = (1, b'abc', 2.7)
     values2 = (b'defg', 101)
     s1 = struct.Struct('I3sf')
