@@ -30,7 +30,7 @@ class MulticastServer(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "MulticastServer recv data: ", data, "client: ", client
+                    print ("MulticastServer recv data: ", data, "client: ", client)
                     sock.sendto("MulticastServer" + str(i), client)
                     i += 1
             except:
@@ -57,7 +57,7 @@ class MulticastClient(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "MulticastClient recv data: ", data, "client: ", client
+                    print ("MulticastClient recv data: ", data, "client: ", client)
                 time.sleep(0.5)
             except:
                 break
@@ -80,7 +80,7 @@ class BroadcastServer(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "BroadcastServer recv data: ", data, "client: ", client
+                    print ("BroadcastServer recv data: ", data, "client: ", client)
                     sock.sendto("BroadcastServer" + str(i), client)
                     i += 1
             except:
@@ -108,7 +108,7 @@ class BroadcastClient(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "BroadcastClient recv data: ", data, "client: ", client
+                    print ("BroadcastClient recv data: ", data, "client: ", client)
                 time.sleep(0.5)
             except:
                 break
@@ -131,7 +131,7 @@ class UnicastServer(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "UnicastServer recv data: ", data, "client: ", client
+                    print ("UnicastServer recv data: ", data, "client: ", client)
                     sock.sendto("UnicastServer" + str(i), client)
                     i += 1
             except:
@@ -158,7 +158,7 @@ class UnicastClient(threading.Thread):
                 infds, outfds, errfds = select.select([sock,],[],[],5)
                 if len(infds) > 0:
                     data, client = sock.recvfrom(packSize)
-                    print "UnicastClient recv data: ", data, "client: ", client
+                    print ("UnicastClient recv data: ", data, "client: ", client)
                 time.sleep(0.5)
             except:
                 break

@@ -11,8 +11,8 @@ s.bind((host,port))
 while 1:
  try:
   data,addr=s.recvfrom(1024)
-  print "got data from",addr
+  print ("got data from",addr)
   s.sendto("broadcasting received",addr)
-  print data
+  print (data)
  except KeyboardInterrupt:
   raise
