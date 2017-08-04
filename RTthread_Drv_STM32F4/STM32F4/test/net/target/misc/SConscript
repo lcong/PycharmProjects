@@ -1,0 +1,7 @@
+Import('RTT_ROOT')
+from building import *
+
+src   = Glob('*.c')
+group = DefineGroup('test_net_misc', src, depend = ['RT_TEST_NET_MISC'])
+
+Return('group')

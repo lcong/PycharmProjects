@@ -1,0 +1,7 @@
+SVN服务器地址： https://www.rt-thread.com/svn/shiningview/
+SVN帐号： shiningview
+初始密码: 7GfJCoD1
+ 
+工单系统地址： http://www.rt-thread.com/trellis/
+帐号： shiningview
+初始密码: 7GfJCoD1

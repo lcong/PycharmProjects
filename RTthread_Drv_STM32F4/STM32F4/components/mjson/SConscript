@@ -1,0 +1,18 @@
+from building import *
+import os
+
+cwd = GetCurrentDir()
+
+# re-generate mjson file.
+last_wd = os.getcwd()
+os.chdir(cwd)
+os.system('mjsonc\\mjsonc.exe --dir .')
+os.chdir(last_wd)
+
+src = Glob('*.c') + Glob('test/*.c')
+
+CPPPATH = [cwd]
+
+group = DefineGroup('M2MJSON', src, depend = [''], CPPPATH = CPPPATH)
+
+Return('group')
