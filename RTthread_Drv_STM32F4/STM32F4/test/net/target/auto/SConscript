@@ -1,9 +1,0 @@
-Import('RTT_ROOT')
-from building import *
-
-src   = Glob('*.c')
-cwd   = GetCurrentDir()
-path  = [os.path.join(cwd, "..", "..", "include")]
-group = DefineGroup('test_net_auto', src, depend = ['RT_TEST_NET_AUTO'], CPPPATH = path)
-
-Return('group')
